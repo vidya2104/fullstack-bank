@@ -27,14 +27,14 @@ pipeline {
         
         stage('TRIVY FS SCAN') {
             steps {
-                sh "trivy fs ."
+                bat "trivy fs ."
             }
         }
         
         stage('SONARQUBE ANALYSIS') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh " $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Bank -Dsonar.projectKey=Bank "
+                    bat " $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Bank -Dsonar.projectKey=Bank "
                 }
             }
         }
@@ -42,14 +42,14 @@ pipeline {
         
          stage('Install Dependencies') {
             steps {
-                sh "npm install"
+                bat "npm install"
             }
         }
         
         stage('Backend') {
             steps {
                 dir('/root/.jenkins/workspace/Bank/app/backend') {
-                    sh "npm install"
+                    bat "npm install"
                 }
             }
         }
@@ -57,14 +57,14 @@ pipeline {
         stage('frontend') {
             steps {
                 dir('/root/.jenkins/workspace/Bank/app/frontend') {
-                    sh "npm install"
+                    bat "npm install"
                 }
             }
         }
         
         stage('Deploy to Conatiner') {
             steps {
-                sh "npm run compose:up -d"
+                bat "npm run compose:up -d"
             }
         }
     }
